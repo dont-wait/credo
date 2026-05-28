@@ -1,0 +1,59 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: jp_postgres
+    restart: no
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-credo}
+      POSTGRES_USER: ${POSTGRES_USER:-credo}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-credo123}
+      PGDATA: /var/lib/postgresql/data/pgdata
+      TZ: Asia/Ho_Chi_Minh
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - credo_network
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-credo} -d ${POSTGRES_DB:-credo}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: jp_pgadmin
+    restart: always
+    profiles:
+      - tools
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@admin.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      # Chạy ở chế độ Desktop (không bắt buộc login lại sau mỗi lần restart)
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    ports:
+      - "${PGADMIN_PORT:-8888}:80"
+    networks:
+      - credo_network
+    depends_on:
+      - postgres
+
+  # --- APP SERVICE (Đã tắt để chạy trên Host/NixOS) ---
+  # app:
+  #   image: maven:3.9.6-eclipse-temurin-17
+  #   container_name: jp_app
+  #   ... (đã ẩn để tránh conflict port và java version) ...
+
+volumes:
+  pg_data:
+    driver: local
+
+networks:
+  credo_network:
+    driver: bridge
