@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CreditScoringAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1acc8beede5a031ea3ea140042a6c862af63a35f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ad1c849bb68c17a7f9520a38fc6acdfe1a0ab4ba")]
 [assembly: System.Reflection.AssemblyProductAttribute("CreditScoringAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CreditScoringAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

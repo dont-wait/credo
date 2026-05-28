@@ -1,8 +1,16 @@
+using CreditScoringAPI.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services
+// Controllers
+builder.Services.AddControllers();
+
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Dependency Injection
+builder.Services.AddInfrastructure(builder.Configuration);
+
 
 var app = builder.Build();
 
@@ -39,6 +47,8 @@ app.MapGet("/weatherforecast", () =>
 
     return forecast;
 });
+app.MapControllers();
+
 
 app.Run();
 
