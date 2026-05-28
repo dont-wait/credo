@@ -170,7 +170,9 @@ print("Scaling hoàn tất.")
 target_ratio = 0.3
 sm_strategy = target_ratio / (1 - target_ratio)  # 0.3 / 0.7 ≈ 0.4286
 sm = SMOTE(sampling_strategy=sm_strategy, random_state=42)
-X_train_scaled, y_train = sm.fit_resample(X_train_scaled, y_train)
+X_train_scaled, y_resampled = sm.fit_resample(X_train_scaled, y_train)
+y_train = pd.Series(y_resampled, name='TARGET')
+X_train_scaled = pd.DataFrame(X_train_scaled, columns=feature_cols)
 print(f"After SMOTE — Train: {X_train_scaled.shape}, Target rate: {y_train.mean():.4f}")
 
 # Cell 11 — Kiểm tra & Summary
