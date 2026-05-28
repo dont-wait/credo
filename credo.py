@@ -24,7 +24,7 @@ import os
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.impute import SimpleImputer
-from sklearn.utils.class_weight import compute_class_weight
+from imblearn.over_sampling import SMOTE
 
 # Khai báo đường dẫn dữ liệu
 DATA_PATH = '/root/.cache/kagglehub/competitions/home-credit-default-risk'
@@ -166,16 +166,16 @@ X_val_scaled = scaler.transform(X_val_imp)
 
 print("Scaling hoàn tất.")
 
-# Cell 10 — Xử lý Class Imbalance
-weights = compute_class_weight('balanced', classes=np.unique(y_train), y=y_train)
-class_weight_dict = dict(enumerate(weights))
-
-print("Class weights:", class_weight_dict)
-print("Ghi chú: Truyền class_weight_dict vào loss function hoặc tham số model khi huấn luyện.")
+# Cell 10 — SMOTE Oversampling (target ratio = 0.3)
+target_ratio = 0.3
+sm_strategy = target_ratio / (1 - target_ratio)  # 0.3 / 0.7 ≈ 0.4286
+sm = SMOTE(sampling_strategy=sm_strategy, random_state=42)
+X_train_scaled, y_train = sm.fit_resample(X_train_scaled, y_train)
+print(f"After SMOTE — Train: {X_train_scaled.shape}, Target rate: {y_train.mean():.4f}")
 
 # Cell 11 — Kiểm tra & Summary
 print("--- SUMMARY ---")
-print(f"X_train shape: {X_train_scaled.shape}")
+print(f"X_train shape (after SMOTE): {X_train_scaled.shape}")
 print(f"X_val shape: {X_val_scaled.shape}")
 print(f"Train Target Rate: {y_train.mean():.4f}")
 print(f"Val Target Rate: {y_val.mean():.4f}")
