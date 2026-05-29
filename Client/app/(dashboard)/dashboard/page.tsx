@@ -1,6 +1,6 @@
 import Header from "@/components/layout/Header";
 import { FileText, CheckCircle, XCircle, Clock, TrendingUp, AlertTriangle } from "lucide-react";
-
+import Link from "next/link";
 const stats = [
   { label: "Tổng hồ sơ hôm nay", value: "48", icon: FileText,     color: "var(--blue)",   bg: "var(--blue-dim)" },
   { label: "Đã phê duyệt",        value: "31", icon: CheckCircle,  color: "var(--green)",  bg: "var(--green-dim)" },
@@ -88,7 +88,11 @@ export default function DashboardPage() {
                   const d = decisionLabel[app.decision];
                   return (
                     <tr key={app.id} style={{ borderBottom: i < recentApps.length - 1 ? "1px solid var(--border)" : "none" }}>
-                      <td style={{ padding: "12px 20px", fontSize: 13, color: "var(--blue-light)", fontFamily: "monospace" }}>{app.id}</td>
+                      <td style={{ padding: "12px 20px", fontSize: 13, color: "var(--blue-light)", fontFamily: "monospace" }}>
+                        <Link href={`/scoring/${app.id}`} style={{ textDecoration:"none", color:"var(--blue-light)" }}>
+                          {app.id}
+                        </Link>
+                      </td>                      
                       <td style={{ padding: "12px 20px", fontSize: 13, fontWeight: 500 }}>{app.name}</td>
                       <td style={{ padding: "12px 20px", fontSize: 13, fontWeight: 700 }}>{app.score}</td>
                       <td style={{ padding: "12px 20px" }}>
