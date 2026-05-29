@@ -1,0 +1,89 @@
+/* @import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+} */
+@import "tailwindcss";
+
+:root {
+  --bg: #f9fafb;          
+  --bg-card: #ffffff;   
+  --bg-hover: #f3f4f6;    /* hover xám nhạt */
+  --border: #e5e7eb;      /* viền xám nhạt */
+  --text: #111827;        /* chữ đen */
+  --text-muted: #6b7280;  /* chữ xám */
+  --text-dim: #374151;    /* chữ đậm hơn */
+
+  --blue: #2563eb;
+  --blue-light: #3b82f6;
+  --blue-dim: #dbeafe;
+
+  --green: #16a34a;
+  --green-light: #22c55e;
+  --green-dim: #dcfce7;
+
+  --red: #dc2626;
+  --red-light: #ef4444;
+  --red-dim: #fee2e2;
+
+  --orange: #f97316;
+  --orange-dim: #ffedd5;
+
+  --purple: #8b5cf6;
+  --radius: 10px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #3a3f5c; }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-ring {
+  0%   { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+.animate-in { animation: fadeIn 0.3s ease forwards; }
+
+/* Score gauge */
+.gauge-ring {
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
