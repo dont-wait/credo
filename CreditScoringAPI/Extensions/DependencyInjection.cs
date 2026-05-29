@@ -1,6 +1,8 @@
 using CreditScoringAPI.Data;
 using CreditScoringAPI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CreditScoringAPI.Extensions
 {

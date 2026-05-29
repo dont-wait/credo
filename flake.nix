@@ -29,8 +29,8 @@
             ps: with ps; [
               numpy
               pandas
-              torch
-              torchvision
+              # torch
+              # torchvision
               matplotlib
               ruff
               black

@@ -7,6 +7,15 @@ Original file is located at
     https://colab.research.google.com/drive/1r5ScqZmrojr1idI3W3nsGPMAIhzMB_s6
 """
 
+from torch.utils.data import TensorDataset, DataLoader
+import torch
+from imblearn.over_sampling import SMOTE
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.model_selection import train_test_split
+import os
+import numpy as np
+import pandas as pd
 import kagglehub
 
 # Tải phiên bản mới nhất của bộ dữ liệu competition
@@ -18,13 +27,6 @@ print("Dữ liệu đã được tải về tại:", path)
 DATA_PATH = path
 
 # Cell 1 — Import & Setup
-import pandas as pd
-import numpy as np
-import os
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder, StandardScaler
-from sklearn.impute import SimpleImputer
-from imblearn.over_sampling import SMOTE
 
 # Khai báo đường dẫn dữ liệu
 DATA_PATH = '/root/.cache/kagglehub/competitions/home-credit-default-risk'
@@ -36,7 +38,8 @@ prev = pd.read_csv(os.path.join(DATA_PATH, 'previous_application.csv'))
 inst = pd.read_csv(os.path.join(DATA_PATH, 'installments_payments.csv'))
 
 print(f"Application shape: {app_train.shape}")
-print(f"Target distribution:\n{app_train['TARGET'].value_counts(normalize=True)}")
+print(f"Target distribution:\n{
+      app_train['TARGET'].value_counts(normalize=True)}")
 
 # Cell 3 — Stratified Split (Thực hiện trước mọi bước thống kê)
 train_df, val_df = train_test_split(
@@ -49,6 +52,8 @@ train_df, val_df = train_test_split(
 print(f"Train size: {train_df.shape[0]}, Val size: {val_df.shape[0]}")
 
 # Cell 4 — Feature Engineering (Main Table)
+
+
 def basic_fe_main(df):
     df = df.copy()
     # Xử lý anomaly
@@ -63,10 +68,12 @@ def basic_fe_main(df):
     df['INCOME_PER_PERSON'] = df['AMT_INCOME_TOTAL'] / df['CNT_FAM_MEMBERS']
     return df
 
+
 train_df = basic_fe_main(train_df)
 val_df = basic_fe_main(val_df)
 
 # Cell 5 — Aggregate bảng phụ (Chống Leakage)
+
 
 def get_bureau_agg(bureau_df, target_ids):
     subset = bureau_df[bureau_df['SK_ID_CURR'].isin(target_ids)]
@@ -77,27 +84,34 @@ def get_bureau_agg(bureau_df, target_ids):
         'AMT_CREDIT_MAX_OVERDUE': ['max', 'mean'],
         'CNT_CREDIT_PROLONG': ['sum']
     })
-    agg.columns = pd.Index(['BUREAU_' + e[0] + "_" + e[1].upper() for e in agg.columns.tolist()])
+    agg.columns = pd.Index(['BUREAU_' + e[0] + "_" + e[1].upper()
+                           for e in agg.columns.tolist()])
     return agg
+
 
 def get_prev_app_agg(prev_df, target_ids):
     subset = prev_df[prev_df['SK_ID_CURR'].isin(target_ids)].copy()
     # Tính rate refused
-    subset['IS_REFUSED'] = (subset['NAME_CONTRACT_STATUS'] == 'Refused').astype(int)
+    subset['IS_REFUSED'] = (
+        subset['NAME_CONTRACT_STATUS'] == 'Refused').astype(int)
     agg = subset.groupby('SK_ID_CURR').agg({
         'AMT_APPLICATION': ['mean', 'max'],
         'AMT_CREDIT': ['mean'],
         'DAYS_DECISION': ['mean', 'min'],
         'IS_REFUSED': ['mean']
     })
-    agg.columns = pd.Index(['PREV_' + e[0] + "_" + e[1].upper() for e in agg.columns.tolist()])
-    agg.rename(columns={'PREV_IS_REFUSED_MEAN': 'PREV_REFUSED_RATE'}, inplace=True)
+    agg.columns = pd.Index(['PREV_' + e[0] + "_" + e[1].upper()
+                           for e in agg.columns.tolist()])
+    agg.rename(
+        columns={'PREV_IS_REFUSED_MEAN': 'PREV_REFUSED_RATE'}, inplace=True)
     return agg
+
 
 def get_installments_agg(inst_df, target_ids):
     subset = inst_df[inst_df['SK_ID_CURR'].isin(target_ids)].copy()
     subset['PAYMENT_DIFF'] = subset['AMT_INSTALMENT'] - subset['AMT_PAYMENT']
-    subset['DAYS_PAST_DUE'] = (subset['DAYS_INSTALMENT'] - subset['DAYS_ENTRY_PAYMENT']).clip(lower=0)
+    subset['DAYS_PAST_DUE'] = (
+        subset['DAYS_INSTALMENT'] - subset['DAYS_ENTRY_PAYMENT']).clip(lower=0)
     subset['IS_LATE'] = (subset['DAYS_PAST_DUE'] > 0).astype(int)
 
     agg = subset.groupby('SK_ID_CURR').agg({
@@ -105,9 +119,11 @@ def get_installments_agg(inst_df, target_ids):
         'DAYS_PAST_DUE': ['mean', 'max'],
         'IS_LATE': ['sum']
     })
-    agg.columns = pd.Index(['INST_' + e[0] + "_" + e[1].upper() for e in agg.columns.tolist()])
+    agg.columns = pd.Index(['INST_' + e[0] + "_" + e[1].upper()
+                           for e in agg.columns.tolist()])
     agg.rename(columns={'INST_IS_LATE_SUM': 'INST_NUM_LATE'}, inplace=True)
     return agg
+
 
 # Áp dụng riêng biệt cho train và val
 for dataset, ids in [('train', train_df['SK_ID_CURR']), ('val', val_df['SK_ID_CURR'])]:
@@ -116,9 +132,11 @@ for dataset, ids in [('train', train_df['SK_ID_CURR']), ('val', val_df['SK_ID_CU
     i_agg = get_installments_agg(inst, ids)
 
     if dataset == 'train':
-        train_df = train_df.join(b_agg, on='SK_ID_CURR', how='left').join(p_agg, on='SK_ID_CURR', how='left').join(i_agg, on='SK_ID_CURR', how='left')
+        train_df = train_df.join(b_agg, on='SK_ID_CURR', how='left').join(
+            p_agg, on='SK_ID_CURR', how='left').join(i_agg, on='SK_ID_CURR', how='left')
     else:
-        val_df = val_df.join(b_agg, on='SK_ID_CURR', how='left').join(p_agg, on='SK_ID_CURR', how='left').join(i_agg, on='SK_ID_CURR', how='left')
+        val_df = val_df.join(b_agg, on='SK_ID_CURR', how='left').join(
+            p_agg, on='SK_ID_CURR', how='left').join(i_agg, on='SK_ID_CURR', how='left')
 
 print(f"Join xong. Train shape: {train_df.shape}")
 
@@ -132,7 +150,8 @@ for col in cat_cols:
         le = LabelEncoder()
         train_df[col] = le.fit_transform(train_df[col].astype(str))
         # Map unknown categories in val to the first seen class
-        val_df[col] = val_df[col].map(lambda s: s if s in le.classes_ else le.classes_[0])
+        val_df[col] = val_df[col].map(
+            lambda s: s if s in le.classes_ else le.classes_[0])
         val_df[col] = le.transform(val_df[col].astype(str))
         le_map[col] = le
 
@@ -173,7 +192,8 @@ sm = SMOTE(sampling_strategy=sm_strategy, random_state=42)
 X_train_scaled, y_resampled = sm.fit_resample(X_train_scaled, y_train)
 y_train = pd.Series(y_resampled, name='TARGET')
 X_train_scaled = pd.DataFrame(X_train_scaled, columns=feature_cols)
-print(f"After SMOTE — Train: {X_train_scaled.shape}, Target rate: {y_train.mean():.4f}")
+print(f"After SMOTE — Train: {
+      X_train_scaled.shape}, Target rate: {y_train.mean():.4f}")
 
 # Cell 11 — Kiểm tra & Summary
 print("--- SUMMARY ---")
@@ -185,13 +205,14 @@ print(f"Final Feature Count: {X_train_scaled.shape[1]}")
 print(f"Số features: {X_train_scaled.shape[1]}")
 
 # Cell 12 — Export
-import pandas as pd
 
 # Lấy tên cột từ trước khi impute (X_train vẫn còn là DataFrame)
 feature_cols = list(X_train.columns)
 
-pd.DataFrame(X_train_scaled, columns=feature_cols).to_csv('X_train_scaled.csv', index=False)
-pd.DataFrame(X_val_scaled,   columns=feature_cols).to_csv('X_val_scaled.csv',   index=False)
+pd.DataFrame(X_train_scaled, columns=feature_cols).to_csv(
+    'X_train_scaled.csv', index=False)
+pd.DataFrame(X_val_scaled,   columns=feature_cols).to_csv(
+    'X_val_scaled.csv',   index=False)
 y_train.to_csv('y_train.csv', index=False)
 y_val.to_csv('y_val.csv', index=False)
 
@@ -218,10 +239,9 @@ Vì dữ liệu mất cân bằng (~8% positive), khi huấn luyện mô hình D
 #### 4. Code mẫu nạp dữ liệu nhanh
 """
 
-import torch
-from torch.utils.data import TensorDataset, DataLoader
 
 # Chuyển đổi từ numpy/csv sang torch Tensor
+
 def create_dataloader(X_path, y_path, batch_size=1024, shuffle=True):
     X = pd.read_csv(X_path).values
     y = pd.read_csv(y_path).values.flatten()
@@ -235,6 +255,7 @@ def create_dataloader(X_path, y_path, batch_size=1024, shuffle=True):
 # Ví dụ nạp dữ liệu
 # train_loader = create_dataloader('X_train_scaled.csv', 'y_train.csv')
 # val_loader = create_dataloader('X_val_scaled.csv', 'y_val.csv', shuffle=False)
+
 
 print("Sẵn sàng nạp vào mô hình Deep Learning.")
 
