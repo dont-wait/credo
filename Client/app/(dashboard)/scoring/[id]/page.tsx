@@ -27,19 +27,23 @@ const result = {
 };
 
 const groupColors: Record<string,{color:string;bg:string}> = {
-  A:{color:"#10b981",bg:"#064e3b"},
-  B:{color:"#3b82f6",bg:"#1e3a5f"},
-  C:{color:"#f59e0b",bg:"#451a03"},
-  D:{color:"#f59e0b",bg:"#451a03"},
-  E:{color:"#ef4444",bg:"#450a0a"},
+  A:{color:"#10b981",bg:"#064e3b"},  // Xuất sắc
+  B:{color:"#3b82f6",bg:"#1e3a5f"},  // Tốt
+  C:{color:"#f59e0b",bg:"#451a03"},  // Trung bình khá
+  D:{color:"#f97316",bg:"#431407"},  // Trung bình (đổi màu để phân biệt với C)
+  E:{color:"#ef4444",bg:"#450a0a"},  // Kém / Nợ xấu
 };
 
 function ScoreGauge({ score }: { score: number }) {
-  const pct = (score - 300) / 550;
+  const pct = (score - 150) / 600;  // đổi 300→150, 550→600
   const r = 80;
   const circ = Math.PI * r;
   const offset = circ * (1 - pct);
-  const color = score >= 720 ? "#10b981" : score >= 640 ? "#3b82f6" : score >= 560 ? "#f59e0b" : "#ef4444";
+  const color = score >= 670 ? "#10b981"   // Nhóm A: 670–750
+              : score >= 620 ? "#3b82f6"   // Nhóm B: 620–669
+              : score >= 570 ? "#f59e0b"   // Nhóm C: 570–619
+              : score >= 300 ? "#f97316"   // Nhóm D: 300–569
+              : "#ef4444";                 // Nhóm E: 150–299
 
   return (
     <svg width={200} height={120} viewBox="0 0 200 120">
@@ -48,9 +52,9 @@ function ScoreGauge({ score }: { score: number }) {
         strokeLinecap="round" strokeDasharray={circ} strokeDashoffset={offset}
         style={{ transition: "stroke-dashoffset 1s ease" }}/>
       <text x={100} y={88} textAnchor="middle" fill={color} fontSize={28} fontWeight={700} fontFamily="monospace">{score}</text>
-      <text x={100} y={108} textAnchor="middle" fill="var(--text-muted)" fontSize={11}>/ 850</text>
-      <text x={24}  y={116} fill="var(--text-muted)" fontSize={10}>300</text>
-      <text x={172} y={116} fill="var(--text-muted)" fontSize={10}>850</text>
+      <text x={100} y={108} textAnchor="middle" fill="var(--text-muted)" fontSize={11}>/ 750</text>  {/* đổi 850→750 */}
+      <text x={24}  y={116} fill="var(--text-muted)" fontSize={10}>150</text>  {/* đổi 300→150 */}
+      <text x={172} y={116} fill="var(--text-muted)" fontSize={10}>750</text>  {/* đổi 850→750 */}
     </svg>
   );
 }
@@ -80,7 +84,13 @@ export default function ScoringPage() {
             <div style={{ display:"flex", flexDirection:"column", alignItems:"center" }}>
               <ScoreGauge score={result.creditScore} />
               <span style={{ background:g.bg, color:g.color, padding:"4px 16px", borderRadius:20, fontSize:13, fontWeight:700, marginTop:8 }}>
-                Nhóm {result.group} — Rủi ro {result.group==="A"?"Rất thấp":result.group==="B"?"Thấp":result.group==="C"?"Trung bình":result.group==="D"?"Cao":"Rất cao"}
+                {({
+                  A: "Nhóm A — Xuất sắc",
+                  B: "Nhóm B — Tốt",
+                  C: "Nhóm C — Trung bình khá",
+                  D: "Nhóm D — Trung bình",
+                  E: "Nhóm E — Kém / Nợ xấu",
+                } as Record<string, string>)[result.group]}
               </span>
             </div>
           </div>
