@@ -1,4 +1,4 @@
-using CreditScoringAPI.Data;
+using CreditScoringAPI.Repository;
 using CreditScoringAPI.Models.Enums;
 using CreditScoringAPI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +42,7 @@ namespace CreditScoringAPI.Extensions
             );
 
             // Services
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICreditService, CreditService>();
 
             return services;

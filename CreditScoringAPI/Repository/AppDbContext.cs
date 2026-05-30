@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using CreditScoringAPI.Models.Entities;
 using CreditScoringAPI.Models.Enums;
 
-namespace CreditScoringAPI.Data;
+namespace CreditScoringAPI.Repository;
 
 public class AppDbContext : DbContext
 {
