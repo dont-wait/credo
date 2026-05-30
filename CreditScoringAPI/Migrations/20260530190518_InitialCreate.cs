@@ -9,29 +9,26 @@ namespace CreditScoringAPI.Migrations
     /// <inheritdoc />
     public partial class InitialCreate : Migration
     {
-        
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(@"
-                DO $$ BEGIN
-                    CREATE TYPE gender_type        AS ENUM ('M', 'F');
-                    CREATE TYPE contract_type      AS ENUM ('Cash loans', 'Revolving loans');
-                    CREATE TYPE suite_type         AS ENUM ('Unaccompanied', 'Family', 'Spouse, partner', 'Children', 'Other_A', 'Other_B', 'Group of people');
-                    CREATE TYPE income_type        AS ENUM ('Working', 'State servant', 'Commercial associate', 'Pensioner', 'Unemployed', 'Student', 'Businessman', 'Maternity leave');
-                    CREATE TYPE education_type     AS ENUM ('Secondary / secondary special', 'Higher education', 'Incomplete higher', 'Lower secondary', 'Academic degree');
-                    CREATE TYPE family_status      AS ENUM ('Single / not married', 'Married', 'Civil marriage', 'Widow', 'Separated');
-                    CREATE TYPE housing_type       AS ENUM ('House / apartment', 'Rented apartment', 'With parents', 'Municipal apartment', 'Office apartment', 'Co-op apartment');
-                    CREATE TYPE occupation_type    AS ENUM ('Laborers', 'Core staff', 'Accountants', 'Managers', 'Drivers', 'Sales staff', 'Cleaning staff', 'Cooking staff', 'Private service staff', 'Medicine staff', 'Security staff', 'High skill tech staff', 'Waiters/barmen staff', 'Low-skill Laborers', 'Realty agents', 'Secretaries', 'IT staff', 'HR staff');
-                    CREATE TYPE wallsmaterial      AS ENUM ('Stone, brick', 'Block', 'Panel', 'Mixed', 'Wooden', 'Others', 'Monolith');
-                    CREATE TYPE housetype_mode     AS ENUM ('block of flats', 'terraced house', 'specific housing');
-                    CREATE TYPE fondkapremont      AS ENUM ('reg oper account', 'org spec account', 'reg oper spec account', 'not specified');
-                    CREATE TYPE emergency_state    AS ENUM ('No', 'Yes');
-                    CREATE TYPE contract_status    AS ENUM ('Approved', 'Refused', 'Canceled', 'Unused offer');
-                    CREATE TYPE prediction_result  AS ENUM ('DEFAULT', 'NON_DEFAULT');
-                EXCEPTION WHEN duplicate_object THEN null;
-                END $$;
-            ");
+            migrationBuilder.AlterDatabase()
+                .Annotation("Npgsql:Enum:contract_status", "Approved,Refused,Canceled,Unused offer")
+                .Annotation("Npgsql:Enum:contract_type", "Cash loans,Revolving loans")
+                .Annotation("Npgsql:Enum:education_type", "Secondary / secondary special,Higher education,Incomplete higher,Lower secondary,Academic degree")
+                .Annotation("Npgsql:Enum:emergency_state", "No,Yes")
+                .Annotation("Npgsql:Enum:family_status", "Single / not married,Married,Civil marriage,Widow,Separated")
+                .Annotation("Npgsql:Enum:fondkapremont", "reg oper account,org spec account,reg oper spec account,not specified")
+                .Annotation("Npgsql:Enum:gender_type", "M,F")
+                .Annotation("Npgsql:Enum:housetype_mode", "block of flats,terraced house,specific housing")
+                .Annotation("Npgsql:Enum:housing_type", "House / apartment,Rented apartment,With parents,Municipal apartment,Office apartment,Co-op apartment")
+                .Annotation("Npgsql:Enum:income_type", "Working,State servant,Commercial associate,Pensioner,Unemployed,Student,Businessman,Maternity leave")
+                .Annotation("Npgsql:Enum:occupation_type", "Laborers,Core staff,Accountants,Managers,Drivers,Sales staff,Cleaning staff,Cooking staff,Private service staff,Medicine staff,Security staff,High skill tech staff,Waiters/barmen staff,Low-skill Laborers,Realty agents,Secretaries,IT staff,HR staff")
+                .Annotation("Npgsql:Enum:organization_type", "Business Entity Type 1,Business Entity Type 2,Business Entity Type 3,School,Government,Religion,Other,XNA,Electricity,Medicine,Self-employed,Transport: type 1,Transport: type 2,Transport: type 3,Transport: type 4,Construction,Housing,Kindergarten,Trade: type 1,Trade: type 2,Trade: type 3,Trade: type 4,Trade: type 5,Trade: type 6,Trade: type 7,Industry: type 1,Industry: type 2,Industry: type 3,Industry: type 4,Industry: type 5,Industry: type 6,Industry: type 7,Industry: type 8,Industry: type 9,Industry: type 10,Industry: type 11,Industry: type 12,Industry: type 13,Military,Services,Security Ministries,Police,Postal,Agriculture,Restaurant,Culture,Hotel,Bank,Insurance,Mobile,Legal Services,Advertising,Cleaning,Telecom,Realtor,University,Emergency,Security")
+                .Annotation("Npgsql:Enum:prediction_result", "DEFAULT,NON_DEFAULT")
+                .Annotation("Npgsql:Enum:suite_type", "Unaccompanied,Family,Spouse, partner,Children,Other_A,Other_B,Group of people")
+                .Annotation("Npgsql:Enum:wallsmaterial", "Stone, brick,Block,Panel,Mixed,Wooden,Others,Monolith");
+
             migrationBuilder.CreateTable(
                 name: "customers",
                 columns: table => new
@@ -41,16 +38,16 @@ namespace CreditScoringAPI.Migrations
                     full_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     id_number = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     date_of_birth = table.Column<DateOnly>(type: "date", nullable: false),
-                    gender = table.Column<string>(type: "gender_type", nullable: false),
+                    gender = table.Column<int>(type: "gender_type", nullable: false),
                     phone_number = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
                     email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    family_status = table.Column<string>(type: "family_status", nullable: true),
+                    family_status = table.Column<int>(type: "family_status", nullable: true),
                     cnt_children = table.Column<short>(type: "smallint", nullable: false),
                     cnt_fam_members = table.Column<short>(type: "smallint", nullable: false),
-                    education_type = table.Column<string>(type: "education_type", nullable: true),
-                    income_type = table.Column<string>(type: "income_type", nullable: true),
-                    occupation_type = table.Column<string>(type: "occupation_type", nullable: true),
-                    organization_type = table.Column<string>(type: "text", nullable: true),
+                    education_type = table.Column<int>(type: "education_type", nullable: true),
+                    income_type = table.Column<int>(type: "income_type", nullable: true),
+                    occupation_type = table.Column<int>(type: "occupation_type", nullable: true),
+                    organization_type = table.Column<int>(type: "organization_type", nullable: true),
                     amt_income_total = table.Column<decimal>(type: "numeric(15,2)", nullable: false),
                     employment_since = table.Column<DateOnly>(type: "date", nullable: true),
                     flag_emp_phone = table.Column<bool>(type: "boolean", nullable: false),
@@ -60,11 +57,11 @@ namespace CreditScoringAPI.Migrations
                     flag_own_car = table.Column<bool>(type: "boolean", nullable: false),
                     own_car_age = table.Column<short>(type: "smallint", nullable: true),
                     flag_own_realty = table.Column<bool>(type: "boolean", nullable: false),
-                    housing_type = table.Column<string>(type: "housing_type", nullable: true),
-                    housetype_mode = table.Column<string>(type: "housetype_mode", nullable: true),
-                    wallsmaterial_mode = table.Column<string>(type: "wallsmaterial", nullable: true),
-                    fondkapremont_mode = table.Column<string>(type: "fondkapremont", nullable: true),
-                    emergencystate_mode = table.Column<string>(type: "emergency_state", nullable: true),
+                    housing_type = table.Column<int>(type: "housing_type", nullable: true),
+                    housetype_mode = table.Column<int>(type: "housetype_mode", nullable: true),
+                    wallsmaterial_mode = table.Column<int>(type: "wallsmaterial", nullable: true),
+                    fondkapremont_mode = table.Column<int>(type: "fondkapremont", nullable: true),
+                    emergencystate_mode = table.Column<int>(type: "emergency_state", nullable: true),
                     elevators_avg = table.Column<decimal>(type: "numeric(6,4)", nullable: true),
                     floorsmax_avg = table.Column<decimal>(type: "numeric(6,4)", nullable: true),
                     floorsmax_mode = table.Column<decimal>(type: "numeric(6,4)", nullable: true),
@@ -146,11 +143,11 @@ namespace CreditScoringAPI.Migrations
                     application_id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     customer_id = table.Column<int>(type: "integer", nullable: false),
-                    name_contract_type = table.Column<string>(type: "contract_type", nullable: false),
+                    name_contract_type = table.Column<int>(type: "contract_type", nullable: false),
                     amt_credit = table.Column<decimal>(type: "numeric(15,2)", nullable: false),
                     amt_annuity = table.Column<decimal>(type: "numeric(12,2)", nullable: false),
                     amt_goods_price = table.Column<decimal>(type: "numeric(15,2)", nullable: true),
-                    name_type_suite = table.Column<string>(type: "suite_type", nullable: true),
+                    name_type_suite = table.Column<int>(type: "suite_type", nullable: true),
                     applied_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     status = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false, defaultValue: "pending"),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -176,7 +173,7 @@ namespace CreditScoringAPI.Migrations
                     prev_app_id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     customer_id = table.Column<int>(type: "integer", nullable: false),
-                    name_contract_status = table.Column<string>(type: "contract_status", nullable: false),
+                    name_contract_status = table.Column<int>(type: "contract_status", nullable: false),
                     amt_application = table.Column<decimal>(type: "numeric(15,2)", nullable: false),
                     amt_credit = table.Column<decimal>(type: "numeric(15,2)", nullable: true),
                     days_decision = table.Column<int>(type: "integer", nullable: false),
@@ -204,7 +201,7 @@ namespace CreditScoringAPI.Migrations
                     model_type = table.Column<string>(type: "text", nullable: false),
                     probability_default = table.Column<decimal>(type: "numeric(8,6)", nullable: false),
                     threshold_used = table.Column<decimal>(type: "numeric(8,6)", nullable: false),
-                    result = table.Column<string>(type: "prediction_result", nullable: false),
+                    result = table.Column<int>(type: "prediction_result", nullable: false),
                     feature_vector = table.Column<string>(type: "jsonb", nullable: true),
                     predicted_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },

@@ -21,21 +21,21 @@ public class AppDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         // Đăng ký Enums với Npgsql
-        modelBuilder.HasPostgresEnum<ContractType>("contract_type");
-        modelBuilder.HasPostgresEnum<GenderType>("gender_type");
-        modelBuilder.HasPostgresEnum<SuiteType>("suite_type");
-        modelBuilder.HasPostgresEnum<IncomeType>("income_type");
-        modelBuilder.HasPostgresEnum<EducationType>("education_type");
-        modelBuilder.HasPostgresEnum<FamilyStatus>("family_status");
-        modelBuilder.HasPostgresEnum<HousingType>("housing_type");
-        modelBuilder.HasPostgresEnum<OccupationType>("occupation_type");
-        modelBuilder.HasPostgresEnum<OrganizationType>("organization_type");
-        modelBuilder.HasPostgresEnum<WallsMaterial>("wallsmaterial");
-        modelBuilder.HasPostgresEnum<HouseTypeMode>("housetype_mode");
-        modelBuilder.HasPostgresEnum<FondKapremont>("fondkapremont");
-        modelBuilder.HasPostgresEnum<EmergencyState>("emergency_state");
-        modelBuilder.HasPostgresEnum<ContractStatus>("contract_status");
-        modelBuilder.HasPostgresEnum<PredictionResult>("prediction_result");
+        modelBuilder.HasPostgresEnum<ContractType>(name: "contract_type");
+        modelBuilder.HasPostgresEnum<GenderType>(name: "gender_type");
+        modelBuilder.HasPostgresEnum<SuiteType>(name: "suite_type");
+        modelBuilder.HasPostgresEnum<IncomeType>(name: "income_type");
+        modelBuilder.HasPostgresEnum<EducationType>(name: "education_type");
+        modelBuilder.HasPostgresEnum<FamilyStatus>(name: "family_status");
+        modelBuilder.HasPostgresEnum<HousingType>(name: "housing_type");
+        modelBuilder.HasPostgresEnum<OccupationType>(name: "occupation_type");
+        modelBuilder.HasPostgresEnum<OrganizationType>(name: "organization_type");
+        modelBuilder.HasPostgresEnum<WallsMaterial>(name: "wallsmaterial");
+        modelBuilder.HasPostgresEnum<HouseTypeMode>(name: "housetype_mode");
+        modelBuilder.HasPostgresEnum<FondKapremont>(name: "fondkapremont");
+        modelBuilder.HasPostgresEnum<EmergencyState>(name: "emergency_state");
+        modelBuilder.HasPostgresEnum<ContractStatus>(name: "contract_status");
+        modelBuilder.HasPostgresEnum<PredictionResult>(name: "prediction_result");
 
         // ── Customer ─────────────────────────────────────────────────────────
         modelBuilder.Entity<Customer>(e =>

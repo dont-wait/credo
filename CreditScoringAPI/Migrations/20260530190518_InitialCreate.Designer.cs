@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CreditScoringAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260530182957_SyncSchemaWithPostgres")]
-    partial class SyncSchemaWithPostgres
+    [Migration("20260530190518_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,21 +23,21 @@ namespace CreditScoringAPI.Migrations
                 .HasAnnotation("ProductVersion", "9.0.16")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "contract_status", "contract_status", new[] { "Approved", "Refused", "Canceled", "Unused offer" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "contract_type", "contract_type", new[] { "Cash loans", "Revolving loans" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "education_type", "education_type", new[] { "Secondary / secondary special", "Higher education", "Incomplete higher", "Lower secondary", "Academic degree" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "emergency_state", "emergency_state", new[] { "No", "Yes" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "family_status", "family_status", new[] { "Single / not married", "Married", "Civil marriage", "Widow", "Separated" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "fondkapremont", "fond_kapremont", new[] { "reg oper account", "org spec account", "reg oper spec account", "not specified" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "gender_type", "gender_type", new[] { "M", "F" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "housetype_mode", "house_type_mode", new[] { "block of flats", "terraced house", "specific housing" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "housing_type", "housing_type", new[] { "House / apartment", "Rented apartment", "With parents", "Municipal apartment", "Office apartment", "Co-op apartment" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "income_type", "income_type", new[] { "Working", "State servant", "Commercial associate", "Pensioner", "Unemployed", "Student", "Businessman", "Maternity leave" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "occupation_type", "occupation_type", new[] { "Laborers", "Core staff", "Accountants", "Managers", "Drivers", "Sales staff", "Cleaning staff", "Cooking staff", "Private service staff", "Medicine staff", "Security staff", "High skill tech staff", "Waiters/barmen staff", "Low-skill Laborers", "Realty agents", "Secretaries", "IT staff", "HR staff" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "organization_type", "organization_type", new[] { "Business Entity Type 1", "Business Entity Type 2", "Business Entity Type 3", "School", "Government", "Religion", "Other", "XNA", "Electricity", "Medicine", "Self-employed", "Transport: type 1", "Transport: type 2", "Transport: type 3", "Transport: type 4", "Construction", "Housing", "Kindergarten", "Trade: type 1", "Trade: type 2", "Trade: type 3", "Trade: type 4", "Trade: type 5", "Trade: type 6", "Trade: type 7", "Industry: type 1", "Industry: type 2", "Industry: type 3", "Industry: type 4", "Industry: type 5", "Industry: type 6", "Industry: type 7", "Industry: type 8", "Industry: type 9", "Industry: type 10", "Industry: type 11", "Industry: type 12", "Industry: type 13", "Military", "Services", "Security Ministries", "Police", "Postal", "Agriculture", "Restaurant", "Culture", "Hotel", "Bank", "Insurance", "Mobile", "Legal Services", "Advertising", "Cleaning", "Telecom", "Realtor", "University", "Emergency", "Security" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "prediction_result", "prediction_result", new[] { "DEFAULT", "NON_DEFAULT" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "suite_type", "suite_type", new[] { "Unaccompanied", "Family", "Spouse", " partner", "Children", "Other_A", "Other_B", "Group of people" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "wallsmaterial", "walls_material", new[] { "Stone", " brick", "Block", "Panel", "Mixed", "Wooden", "Others", "Monolith" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "contract_status", new[] { "Approved", "Refused", "Canceled", "Unused offer" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "contract_type", new[] { "Cash loans", "Revolving loans" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "education_type", new[] { "Secondary / secondary special", "Higher education", "Incomplete higher", "Lower secondary", "Academic degree" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "emergency_state", new[] { "No", "Yes" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "family_status", new[] { "Single / not married", "Married", "Civil marriage", "Widow", "Separated" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "fondkapremont", new[] { "reg oper account", "org spec account", "reg oper spec account", "not specified" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "gender_type", new[] { "M", "F" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "housetype_mode", new[] { "block of flats", "terraced house", "specific housing" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "housing_type", new[] { "House / apartment", "Rented apartment", "With parents", "Municipal apartment", "Office apartment", "Co-op apartment" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "income_type", new[] { "Working", "State servant", "Commercial associate", "Pensioner", "Unemployed", "Student", "Businessman", "Maternity leave" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "occupation_type", new[] { "Laborers", "Core staff", "Accountants", "Managers", "Drivers", "Sales staff", "Cleaning staff", "Cooking staff", "Private service staff", "Medicine staff", "Security staff", "High skill tech staff", "Waiters/barmen staff", "Low-skill Laborers", "Realty agents", "Secretaries", "IT staff", "HR staff" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "organization_type", new[] { "Business Entity Type 1", "Business Entity Type 2", "Business Entity Type 3", "School", "Government", "Religion", "Other", "XNA", "Electricity", "Medicine", "Self-employed", "Transport: type 1", "Transport: type 2", "Transport: type 3", "Transport: type 4", "Construction", "Housing", "Kindergarten", "Trade: type 1", "Trade: type 2", "Trade: type 3", "Trade: type 4", "Trade: type 5", "Trade: type 6", "Trade: type 7", "Industry: type 1", "Industry: type 2", "Industry: type 3", "Industry: type 4", "Industry: type 5", "Industry: type 6", "Industry: type 7", "Industry: type 8", "Industry: type 9", "Industry: type 10", "Industry: type 11", "Industry: type 12", "Industry: type 13", "Military", "Services", "Security Ministries", "Police", "Postal", "Agriculture", "Restaurant", "Culture", "Hotel", "Bank", "Insurance", "Mobile", "Legal Services", "Advertising", "Cleaning", "Telecom", "Realtor", "University", "Emergency", "Security" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "prediction_result", new[] { "DEFAULT", "NON_DEFAULT" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "suite_type", new[] { "Unaccompanied", "Family", "Spouse", " partner", "Children", "Other_A", "Other_B", "Group of people" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "wallsmaterial", new[] { "Stone", " brick", "Block", "Panel", "Mixed", "Wooden", "Others", "Monolith" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("CreditScoringAPI.Models.Entities.CreditBureauHistory", b =>
