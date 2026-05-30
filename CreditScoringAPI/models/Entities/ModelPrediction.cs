@@ -26,6 +26,7 @@ public class ModelPrediction
 
     [Required]
     [Column("probability_default", TypeName = "numeric(8,6)")]
+    [Range(typeof(decimal), "0", "1")]
     public decimal ProbabilityDefault { get; set; }            // PD score ∈ [0,1]
 
     [Required]

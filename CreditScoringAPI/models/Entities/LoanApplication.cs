@@ -21,10 +21,12 @@ public class LoanApplication
 
     [Required]
     [Column("amt_credit", TypeName = "numeric(15,2)")]
+    [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]
     public decimal AmtCredit { get; set; }
 
     [Required]
     [Column("amt_annuity", TypeName = "numeric(12,2)")]
+    [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]
     public decimal AmtAnnuity { get; set; }
 
     [Column("amt_goods_price", TypeName = "numeric(15,2)")]

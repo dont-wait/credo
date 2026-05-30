@@ -20,6 +20,23 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        // Đăng ký Enums với Npgsql
+        modelBuilder.HasPostgresEnum<ContractType>("contract_type");
+        modelBuilder.HasPostgresEnum<GenderType>("gender_type");
+        modelBuilder.HasPostgresEnum<SuiteType>("suite_type");
+        modelBuilder.HasPostgresEnum<IncomeType>("income_type");
+        modelBuilder.HasPostgresEnum<EducationType>("education_type");
+        modelBuilder.HasPostgresEnum<FamilyStatus>("family_status");
+        modelBuilder.HasPostgresEnum<HousingType>("housing_type");
+        modelBuilder.HasPostgresEnum<OccupationType>("occupation_type");
+        modelBuilder.HasPostgresEnum<OrganizationType>("organization_type");
+        modelBuilder.HasPostgresEnum<WallsMaterial>("wallsmaterial");
+        modelBuilder.HasPostgresEnum<HouseTypeMode>("housetype_mode");
+        modelBuilder.HasPostgresEnum<FondKapremont>("fondkapremont");
+        modelBuilder.HasPostgresEnum<EmergencyState>("emergency_state");
+        modelBuilder.HasPostgresEnum<ContractStatus>("contract_status");
+        modelBuilder.HasPostgresEnum<PredictionResult>("prediction_result");
+
         // ── Customer ─────────────────────────────────────────────────────────
         modelBuilder.Entity<Customer>(e =>
         {
@@ -30,45 +47,38 @@ public class AppDbContext : DbContext
             // Unique constraint trên CCCD/CMND
             e.HasIndex(x => x.IdNumber).IsUnique();
 
-            // Enums → string trong DB
+            // Native Enums
             e.Property(x => x.Gender)
-             .HasConversion<string>()
              .HasColumnType("gender_type");
 
             e.Property(x => x.FamilyStatus)
-             .HasConversion<string>()
              .HasColumnType("family_status");
 
             e.Property(x => x.EducationType)
-             .HasConversion<string>()
              .HasColumnType("education_type");
 
             e.Property(x => x.IncomeType)
-             .HasConversion<string>()
              .HasColumnType("income_type");
 
+            e.Property(x => x.OrganizationType)
+             .HasColumnType("organization_type");
+
             e.Property(x => x.OccupationType)
-             .HasConversion<string>()
              .HasColumnType("occupation_type");
 
             e.Property(x => x.HousingType)
-             .HasConversion<string>()
              .HasColumnType("housing_type");
 
             e.Property(x => x.HousetypeMode)
-             .HasConversion<string>()
              .HasColumnType("housetype_mode");
 
             e.Property(x => x.WallsmaterialMode)
-             .HasConversion<string>()
              .HasColumnType("wallsmaterial");
 
             e.Property(x => x.Fondkapremont)
-             .HasConversion<string>()
              .HasColumnType("fondkapremont");
 
             e.Property(x => x.EmergencyState)
-             .HasConversion<string>()
              .HasColumnType("emergency_state");
 
             // CHECK constraints
@@ -111,11 +121,9 @@ public class AppDbContext : DbContext
             e.Property(x => x.ApplicationId).UseIdentityAlwaysColumn();
 
             e.Property(x => x.NameContractType)
-             .HasConversion<string>()
              .HasColumnType("contract_type");
 
             e.Property(x => x.NameTypeSuite)
-             .HasConversion<string>()
              .HasColumnType("suite_type");
 
             e.Property(x => x.Status)
@@ -156,7 +164,6 @@ public class AppDbContext : DbContext
             e.Property(x => x.PrevAppId).UseIdentityAlwaysColumn();
 
             e.Property(x => x.NameContractStatus)
-             .HasConversion<string>()
              .HasColumnType("contract_status");
 
             e.HasIndex(x => x.CustomerId).HasDatabaseName("idx_prev_app_customer");
@@ -188,7 +195,6 @@ public class AppDbContext : DbContext
              .HasConversion<string>();
 
             e.Property(x => x.Result)
-             .HasConversion<string>()
              .HasColumnType("prediction_result");
 
             e.ToTable(t =>

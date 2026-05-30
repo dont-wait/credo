@@ -41,9 +41,11 @@ public class Customer
     public FamilyStatus? FamilyStatus { get; set; }
 
     [Column("cnt_children")]
+    [Range(0, short.MaxValue)]
     public short CntChildren { get; set; } = 0;
 
     [Column("cnt_fam_members")]
+    [Range(1, short.MaxValue)]
     public short CntFamMembers { get; set; } = 1;
 
     // ── Học vấn & nghề nghiệp ────────────────────────────────────────────────
@@ -57,10 +59,11 @@ public class Customer
     public OccupationType? OccupationType { get; set; }
 
     [Column("organization_type")]
-    public string? OrganizationType { get; set; }         // free text — quá nhiều enum
+    public OrganizationType? OrganizationType { get; set; }
 
     [Required]
     [Column("amt_income_total", TypeName = "numeric(15,2)")]
+    [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]
     public decimal AmtIncomeTotal { get; set; }
 
     [Column("employment_since")]
@@ -119,9 +122,11 @@ public class Customer
 
     // ── Vùng địa lý ──────────────────────────────────────────────────────────
     [Column("region_rating_client")]
+    [Range(1, 3)]
     public short? RegionRatingClient { get; set; }
 
     [Column("region_rating_client_w_city")]
+    [Range(1, 3)]
     public short? RegionRatingClientWCity { get; set; }
 
     [Column("reg_region_not_work_region")]
@@ -164,12 +169,15 @@ public class Customer
 
     // ── EXT_SOURCE (điểm tín dụng ngoài) ─────────────────────────────────────
     [Column("ext_source_1", TypeName = "numeric(8,6)")]
+    [Range(typeof(decimal), "0", "1")]
     public decimal? ExtSource1 { get; set; }
 
     [Column("ext_source_2", TypeName = "numeric(8,6)")]
+    [Range(typeof(decimal), "0", "1")]
     public decimal? ExtSource2 { get; set; }
 
     [Column("ext_source_3", TypeName = "numeric(8,6)")]
+    [Range(typeof(decimal), "0", "1")]
     public decimal? ExtSource3 { get; set; }
 
     // ── Số lần tra CIC ────────────────────────────────────────────────────────
