@@ -28,7 +28,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: jp_pgadmin
+    container_name: credo_pgadmin
     restart: always
     profiles:
       - tools
@@ -38,7 +38,7 @@ services:
       # Chạy ở chế độ Desktop (không bắt buộc login lại sau mỗi lần restart)
       PGADMIN_CONFIG_SERVER_MODE: "False"
     ports:
-      - "${PGADMIN_PORT:-8888}:80"
+      - "${PGADMIN_PORT:-8889}:80"
     networks:
       - credo_network
     depends_on:
