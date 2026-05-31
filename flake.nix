@@ -10,8 +10,8 @@
       dotnet-combined =
         with pkgs.dotnetCorePackages;
         combinePackages [
-          sdk_8_0
-          aspnetcore_8_0
+          sdk_9_0
+          aspnetcore_9_0
         ];
     in
     {
@@ -43,7 +43,7 @@
 
         shellHook = ''
           export DOTNET_ROOT="${dotnet-combined}";
-          export MSBuildSDKsPath=$(ls -d ${dotnet-combined}/share/dotnet/sdk/8.0.*/Sdks | head -n 1)
+          export MSBuildSDKsPath=$(ls -d ${dotnet-combined}/share/dotnet/sdk/9.0.*/Sdks | head -n 1)
           export LD_LIBRARY_PATH="${
             pkgs.lib.makeLibraryPath [
               pkgs.stdenv.cc.cc
@@ -54,7 +54,7 @@
           }:$LD_LIBRARY_PATH"
           export PATH="$PATH:$HOME/.dotnet/tools"
           echo "MSBuildSDKsPath set to: $MSBuildSDKsPath"
-          echo ".NET 8 Dev Shell (Roslyn-ready) Active"
+          echo ".NET 9 Dev Shell (Roslyn-ready) Active"
           echo "Development environment configuration ready!" 
           echo "Python: $(python --version)"
         '';
